@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ewoks team git flow</title>
+    <script src="js/gitgraph.js"></script>
+    <link href="css/gitgraph.css">
+</head>
+<body>
+<div>
+    <canvas id="gitGraph"></canvas>
+</div>
+</body>
+</html>
+<script>
+    var gitgraph = new GitGraph({
+        template: "metro",
+        orientation: "vertical",
+        author: "Egor Z.",
+        mode: "extended"
+    });
+
+    var master = gitgraph.branch("pentaho/master");
+
+    master.commit("Shiny commit 1");
+    master.commit("Shiny commit 2");
+
+    var featureOne = master.branch("fork1/KEK-123");
+    var iteration0Branch = featureOne.branch("fork1/EWOK0");
+    var integrationBranch = master.branch("pentaho/EWOK");
+
+    featureOne.commit({message: "[KEK-123] Feature implementation", author: "Egor Z."});
+    featureOne.commit({message: "[KEK-123] Unit tests", author: "Egor Z."});
+
+    featureOne.merge(iteration0Branch);
+
+    master.commit({message: "Merge PR", author: "Thomas M."});
+
+    master.merge(integrationBranch);
+
+    iteration0Branch.merge(integrationBranch);
+
+    master.commit({message: "Merge another PR", author: "Thomas M."});
+
+    iteration0Branch.merge(master);
+
+    var featureTwo = master.branch("fork1/LOL-123");
+    var iteration1Branch = featureTwo.branch("fork1/EWOK1");
+
+    featureTwo.commit({message: "[LOL-123] Feature implementation", author: "Egor Z."});
+    featureTwo.commit({message: "[LOL-123] Unit tests", author: "Egor Z."});
+
+    featureTwo.merge(iteration1Branch);
+
+    master.commit({message: "Super commit", author: "Thomas M."});
+
+    master.merge(integrationBranch);
+
+    iteration1Branch.merge(integrationBranch);
+
+
+    iteration1Branch.merge(master);
+</script>
